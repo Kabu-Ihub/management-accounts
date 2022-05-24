@@ -1,0 +1,34 @@
+function sendSlackMessage(e) {
+  var app = SpreadsheetApp;
+  var ss = app.getActiveSpreadsheet();
+  var activeSheet =ss.getActiveSheet();
+  //activeSheet.getRange().setValue();
+    status = e.value;
+    range = e.range;
+  
+  if (e.range.getColumn() === 12) {
+    let source = e.source;
+    let row = e.range.getRow();
+    let Project = source.getActiveSheet().getRange (row, 3, 1, 1,).getValue();
+    let ProjectCode = source.getActiveSheet().getRange (row, 4, 1, 1,).getValue();
+    let DatePaid = e.value;
+    let url ="https://hooks.slack.com/services/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";
+    
+    let payload = {
+    text: "🎉🎆🎉*We received payment* from "+ Project + " on "+ DatePaid + " PM's please get the " + ProjectCode+ " team to send their *Consultant invoices* to accounts for the Payment Calculation that is due as per the Economics Sheet. 🎊"
+    }
+  
+    let headers = {
+    'Content-type': 'application/json'
+    }
+    let options = {
+    headers: headers,
+    method:'POST',
+    payload:JSON.stringify(payload)
+    }
+    UrlFetchApp.fetch(url, options);
+  }else {
+    console.log("DatePaid was not updated,the column was:",e.range.getcolumn())
+  }
+ 
+}
